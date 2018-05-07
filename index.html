@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>paint, but it moves</title>
+</head>
+
+<body style="margin: 0;">
+    <h1 style="text-align: center;">paint, but it moves</h1>
+    <div style="text-align: center">
+        easy <input id="difficulty" type="range" min="0" max="10" value="0"> hard
+        <br>
+        <button id="btn" onclick="toggleGame()">start</button>
+    </div>
+    <div style="padding-top: 30px;"></div>
+    <canvas id="myCanvas" width="700" height="450" style="border: 1px black solid;position: relative;"></canvas>
+    <div style="padding-top: 30px;"></div>
+    <button onclick="erase()" style="display: block;margin: auto;">clear</button>
+</body>
+
+</html>
+<script>
+    var canvas = document.getElementById("myCanvas");
+    canvas.addEventListener('mousedown', start);
+    canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener('mouseup', stop);
+    canvas.addEventListener('mouseout', stop);
+    var context = canvas.getContext('2d');
+
+    var x = 0;
+    var y = 0;
+    var newX = 0;
+    var newY = 0;
+
+    var isClicked = false;
+
+    function stop() {
+        isClicked = false;
+    }
+
+    function start() {
+        isClicked = true;
+        x = event.offsetX;
+        y = event.offsetY;
+    }
+
+    function erase(){
+        context.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+    function draw() {
+        if (isClicked) {
+            newX = event.offsetX;
+            newY = event.offsetY;
+            context.beginPath();
+            context.moveTo(x, y);
+            context.lineTo(newX, newY);
+            context.stroke();
+            x = newX;
+            y = newY;
+        }
+    }
+
+    var btn = document.getElementById("btn");
+    var isPlaying = false;
+
+    function toggleGame() {
+        if (btn.innerText === "start") {
+            btn.innerText = "stop";
+            isPlaying = true;
+            bounce();
+        } else {
+            btn.innerText = "start";
+            isPlaying = false;
+        }
+    }
+
+    var slider = document.getElementById("difficulty");
+    difficultyNum = 0;
+    slider.addEventListener( 'input', event => {
+        difficultyNum = event.target.value;
+    });
+
+    function bounce() {
+        var elem = document.getElementById("myCanvas");
+        var pos = 0;
+        var id = setInterval(backnforth, 10 - difficultyNum);
+        var isMovingRight = true;
+
+        function backnforth() {
+            if (!isPlaying) {
+                clearInterval(id);
+            }
+            if (isMovingRight) {
+                if (pos >= window.outerWidth - 702) {
+                    isMovingRight = false;
+                } else {
+                    pos++;
+                    elem.style.left = pos + 'px';
+                }
+            } else {
+                if (pos == 0) {
+                    isMovingRight = true;
+                } else {
+                    pos--;
+                    elem.style.left = pos + 'px';
+                }
+            }
+        }
+    }
+</script>
