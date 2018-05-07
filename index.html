@@ -2,13 +2,15 @@
 <html>
 
 <head>
+    <link rel="stylesheet" href="main.css">
     <title>paint, but it moves</title>
 </head>
 
 <body style="margin: 0;">
     <h1 style="text-align: center;">paint, but it moves</h1>
     <div style="text-align: center">
-        easy <input id="difficulty" type="range" min="0" max="10" value="0"> hard
+        easy
+        <input id="difficulty" type="range" min="0" max="10" value="0"> hard
         <br>
         <button id="btn" onclick="toggleGame()">start</button>
     </div>
@@ -16,16 +18,30 @@
     <canvas id="myCanvas" width="700" height="450" style="border: 1px black solid;position: relative;"></canvas>
     <div style="padding-top: 30px;"></div>
     <button onclick="erase()" style="display: block;margin: auto;">clear</button>
+    <p style="text-align: center;">
+        <span style="color:#ff2a00"> [r]ed </span>
+        <span style="color:#ff8300"> [o]range </span>
+        <span style="color:#bebc1c"> [y]ellow </span>
+        <span style="color:#00ff15"> [g]reen </span>
+        <span style="color:#0099ff"> [b]lue </span>
+        <span style="color:#3700ff"> [i]ndigo </span>
+        <span style="color:#a500ff"> [v]iolet </span>
+        <span style="color:#000000"> blac[k] </span>
+    </p>
 </body>
 
 </html>
 <script>
+    window.addEventListener("keypress", changeColor);
+
     var canvas = document.getElementById("myCanvas");
     canvas.addEventListener('mousedown', start);
     canvas.addEventListener('mousemove', draw);
     canvas.addEventListener('mouseup', stop);
     canvas.addEventListener('mouseout', stop);
     var context = canvas.getContext('2d');
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, canvas.width, canvas.height);
 
     var x = 0;
     var y = 0;
@@ -33,6 +49,36 @@
     var newY = 0;
 
     var isClicked = false;
+
+    function changeColor(e) {
+        var keyCode = e.keyCode;
+        //alert(keyCode);
+        switch (keyCode) {
+            case 114:
+                context.strokeStyle = "#ff2a00";
+                break;
+            case 111:
+                context.strokeStyle = "#ff8300";
+                break;
+            case 121:
+                context.strokeStyle = "#bebc1c";
+                break;
+            case 103:
+                context.strokeStyle = "#00ff15";
+                break;
+            case 98:
+                context.strokeStyle = "#0099ff";
+                break;
+            case 105:
+                context.strokeStyle = "#3700ff";
+                break;
+            case 118:
+                context.strokeStyle = "#a500ff";
+                break;
+            default:
+                context.strokeStyle = "#000000";
+        }
+    }
 
     function stop() {
         isClicked = false;
@@ -44,7 +90,7 @@
         y = event.offsetY;
     }
 
-    function erase(){
+    function erase() {
         context.clearRect(0, 0, canvas.width, canvas.height);
     }
 
@@ -77,7 +123,7 @@
 
     var slider = document.getElementById("difficulty");
     difficultyNum = 0;
-    slider.addEventListener( 'input', event => {
+    slider.addEventListener('input', event => {
         difficultyNum = event.target.value;
     });
 
