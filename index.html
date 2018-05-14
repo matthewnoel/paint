@@ -42,6 +42,7 @@
     var context = canvas.getContext('2d');
     context.fillStyle = "#ffffff";
     context.fillRect(0, 0, canvas.width, canvas.height);
+    context.lineCap = 'round';
 
     var x = 0;
     var y = 0;
@@ -54,6 +55,12 @@
         var keyCode = e.keyCode;
         //alert(keyCode);
         switch (keyCode) {
+            case 91:
+                context.lineWidth = context.lineWidth - 5;
+                break;
+            case 93:
+                context.lineWidth = context.lineWidth + 5;
+                break;
             case 114:
                 context.strokeStyle = "#ff2a00";
                 break;
